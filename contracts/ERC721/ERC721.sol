@@ -1,8 +1,8 @@
-pragma solidity ^0.8.21;
+pragma solidity ^0.8.0;
 
 contract XHERC721  {
 
-    address public fundation; // 管理员  
+    address public _fundation; // 管理员  
     
     // 代币名称
     string private _name;
@@ -31,14 +31,14 @@ contract XHERC721  {
     /**
      * 初始化构造
      */
-    function XHERC721(string memory name_, string memory symbol_) public {
+   constructor(string memory name_, string memory symbol_) {
         _name = name_;
         _symbol = symbol_;
-	    fundation = msg.sender; 
-    }  
+        _fundation = msg.sender; 
+    }
 
     modifier onlyFundation() {
-        require(msg.sender == fundation);
+        require(msg.sender == _fundation);
         _;
     }
 
@@ -223,5 +223,4 @@ contract XHERC721  {
         address owner = XHERC721.ownerOf(tokenId);
         return (spender == owner || getApproved(tokenId) == spender || isApprovedForAll(owner, spender));
     }
-
 }
