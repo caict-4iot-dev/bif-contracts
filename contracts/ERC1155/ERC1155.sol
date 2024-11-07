@@ -1,4 +1,4 @@
-pragma solidity ^0.4.26;
+pragma solidity ^0.8.20;
 
 contract ERC1155 {
 
