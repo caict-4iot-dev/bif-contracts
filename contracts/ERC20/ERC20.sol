@@ -20,7 +20,7 @@ contract TokenERC20 {
     /**
      * 初始化构造
      */
-    function TokenERC20(uint256 initialSupply, string tokenName, string tokenSymbol) public {
+    constructor(uint256 initialSupply, string memory tokenName, string memory tokenSymbol) public {
         totalSupply = initialSupply * 10 ** uint256(decimals);  // 供应的份额，份额跟最小的代币单位有关，份额 = 币数 * 10 ** decimals。
         balanceOf[msg.sender] = totalSupply;                // 创建者拥有所有的代币
         name = tokenName;                                   // 代币名称
@@ -32,7 +32,7 @@ contract TokenERC20 {
      */
     function _transfer(address _from, address _to, uint _value) internal {
         // 确保目标地址不为0x0，因为0x0地址代表销毁
-        require(_to != 0x0);
+        require(_to != address(0x0));
         // 检查发送者余额
         require(balanceOf[_from] >= _value);
         // 确保转移为正数个
@@ -44,7 +44,7 @@ contract TokenERC20 {
         balanceOf[_from] -= _value;
         // Add the same to the recipient
         balanceOf[_to] += _value;
-        Transfer(_from, _to, _value);
+        emit Transfer(_from, _to, _value);
 
         // 用assert来检查代码逻辑。
         assert(balanceOf[_from] + balanceOf[_to] == previousBalances);
@@ -97,7 +97,7 @@ contract TokenERC20 {
         require(balanceOf[msg.sender] >= _value);   // Check if the sender has enough
         balanceOf[msg.sender] -= _value;            // Subtract from the sender
         totalSupply -= _value;                      // Updates totalSupply
-        Burn(msg.sender, _value);
+        emit Burn(msg.sender, _value);
         return true;
     }
 
@@ -115,7 +115,7 @@ contract TokenERC20 {
         balanceOf[_from] -= _value;                         // Subtract from the targeted balance
         allowance[_from][msg.sender] -= _value;             // Subtract from the sender's allowance
         totalSupply -= _value;                              // Update totalSupply
-        Burn(_from, _value);
+        emit Burn(_from, _value);
         return true;
     }
 }
